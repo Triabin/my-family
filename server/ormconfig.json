@@ -1,0 +1,7 @@
+{
+  "type": "sqlite",
+  "database": "my-family.db",
+  "synchronize": true,
+  "logging": false,
+  "entities": ["src/entity/**/*.ts"]
+}

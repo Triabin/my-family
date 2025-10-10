@@ -1,0 +1,7 @@
+node_modules
+front/node_modules
+front/dist
+server/node_modules
+server/dist
+.DS_Store
+*.iml
