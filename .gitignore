@@ -7,3 +7,4 @@ server/dist
 *.iml
 .idea
 .vscode
+*.log

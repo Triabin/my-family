@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "dotenvx run -- node src/server.ts",
-    "build": "tsc && node build.js",
-    "start": "node dist/index.js",
+    "dev": "dotenvx run -- nodemon src/server.ts | pino-pretty",
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "preview": "node dist/server.js",
     "clean": "rm -rf dist"
   },
   "author": "Triabin",
@@ -17,13 +18,16 @@
     "@dotenvx/dotenvx": "^1.51.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "pino": "^10.0.0",
+    "pino-http": "^11.0.0",
+    "pino-pretty": "^13.1.2",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.7.1",
-    "@types/sqlite3": "^5.1.0",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"

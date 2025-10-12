@@ -26,3 +26,5 @@ my-family
 `FAMILY_NAME`：必填，家族姓氏
 
 `DB_FILE`: 可选，sqlite数据库文件路径，默认`./data/family.db`
+
+`DB_PASSWORD`：可选，sqlite数据库密码，默认空

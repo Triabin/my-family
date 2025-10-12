@@ -2,21 +2,26 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-    "baseUrl": ".",
+    "rootDir": "../",
+    "outDir": "./dist",
+    "baseUrl": "./",
     "paths": {
-      "@core/*": ["../core/src/*"]
+      "@core/*": ["../core/src/*"],
+      "@/*": ["src/*"]
     },
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "es6",
-    "lib": ["esnext"],
+    "module": "ESNext",
+    "target": "ES2023",
+    "lib": ["ES2023"],
     "types": ["node"],
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
 
     // Other Outputs
     "sourceMap": true,
@@ -38,7 +43,7 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    // "verbatimModuleSyntax": true,
+//    "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
@@ -46,6 +51,10 @@
 
     // Other Options
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  }
+    "emitDecoratorMetadata": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["src/**/*", "../core/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
