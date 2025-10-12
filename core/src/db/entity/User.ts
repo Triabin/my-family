@@ -1,3 +1,6 @@
+/**
+ * 用户表实体
+ */
 class User {
   id: string;
   name: string;
