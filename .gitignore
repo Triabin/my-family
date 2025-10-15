@@ -3,6 +3,7 @@ front/node_modules
 front/dist
 server/node_modules
 server/dist
+logs
 .DS_Store
 *.iml
 .idea

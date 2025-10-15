@@ -14,7 +14,6 @@
 my-family
 ├── README.md
 ├── package.json
-├── core    // 公共代码
 ├── server  // 后端代码
 └── front   // 前端代码
 ```
