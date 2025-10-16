@@ -14,9 +14,9 @@ const logger = pino(pino.transport({
   ]
 }));
 // 使用 pino-http 作为 HTTP 请求日志中间件
-const pinoHttpMiddleware = pinoHttp({
+const pinoHttpMiddlewareCfg = pinoHttp({
   logger,
 });
 
 export default logger;
-export { pinoHttpMiddleware };
+export { pinoHttpMiddlewareCfg };

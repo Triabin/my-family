@@ -4,6 +4,7 @@ import RelationType from '@/common/enums/RelationType.ts';
 import { generateUUID } from '@/common/utils.ts';
 import db from '../index.ts';
 import logger from "../../config/logger.ts";
+import type UserDto from '../user/UserDto.ts';
 
 /**
  * 用户表实体类，表名：mf_user
@@ -59,6 +60,24 @@ class User {
       column.lastLogin? new Date(column.lastLogin) : undefined,
       column.updatedAt? new Date(column.updatedAt) : undefined,
       column.createdAt? new Date(column.createdAt) : undefined,
+    );
+  }
+
+  public static fromDto(dto: UserDto) {
+    const birthday = dto.birthday ? new Date(dto.birthday) : undefined;
+    const deathday = dto.deathday ? new Date(dto.deathday) : undefined;
+    return new User(
+      generateUUID(),
+      dto.username,
+      dto.password,
+      dto.name,
+      dto.roleId,
+      false,
+      dto.generation,
+      dto.gender,
+      dto.relations || undefined,
+      birthday,
+      deathday,
     );
   }
 }
@@ -131,6 +150,14 @@ async function findById(id: string): Promise<User | undefined> {
   }
 }
 
+async function findByUsername(username: string): Promise<User | undefined> {
+  const result = await db.select().from(mfUser).where(eq(mfUser.username, username));
+  if (result && result.length > 0) {
+    const column = result[0];
+    return Promise.resolve(User.fromColumn(column));
+  }
+}
+
 export default User;
 export {
   type Relation,
@@ -140,5 +167,6 @@ export {
   addBatch,
   update,
   deleteById,
-  findById
+  findById,
+  findByUsername
 };
