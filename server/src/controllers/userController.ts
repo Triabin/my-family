@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import logger from '../config/logger.ts';
-import User, { findById } from '../db/user/User.ts';
+import { findById } from '../db/user/User.ts';
 import type UserDto from '../db/user/UserDto.ts';
 import { register as registerService, login as loginService } from '../services/userService.ts';
 

@@ -51,4 +51,3 @@ CREATE TRIGGER IF NOT EXISTS update_app_main_trigger
 BEGIN
     UPDATE `mf_app_main` SET `updated_at` = DATETIME('now', 'localtime') WHERE id = NEW.id;
 END;
--- 插入初始化应用数据

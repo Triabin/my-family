@@ -59,7 +59,7 @@ export async function register(req: Request<UserDto>, res: Response) {
         .setProtectedHeader({alg: 'HS256'})
         .setExpirationTime('7d')
         .sign(encodedSecret);
-      res.setHeader('Authorization', `Bearer ${token}`);
+      // res.setHeader('Authorization', `Bearer ${token}`);
       resp.token = token;
     }
     return res.status(201).json(resp);

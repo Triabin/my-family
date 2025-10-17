@@ -1,5 +1,8 @@
+<!-- 应用安装（初始化）页面组件 -->
 <template>
-  <RouterView/>
+  <div>
+    <h1>应用安装</h1>
+  </div>
 </template>
 <script lang="ts" setup>
 
