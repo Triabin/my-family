@@ -2,6 +2,7 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import db from '../index.ts';
 import { eq } from 'drizzle-orm';
 import logger from '../../config/logger.ts';
+import RolePermission, { hasPermission } from '../../common/enums/RolePermission.ts';
 
 /**
  * 角色表实体类
@@ -21,6 +22,15 @@ class Role {
     public roleDesc?: string
   ) {}
 
+  /**
+   * 检查角色是否具有指定权限
+   * @param checkFor 要检查的权限
+   * @returns {boolean} 是否具有指定权限
+   */
+  hasPermission(checkFor: RolePermission): boolean {
+    return hasPermission(this.property, checkFor);
+  }
+
   public static fromColumn(column: any) {
     return new Role(
       column.id,
@@ -28,6 +38,12 @@ class Role {
       column.property,
       column.roleDesc,
     );
+  }
+
+  public static async hasPermission(roleId: number, checkFor: RolePermission) {
+    const role = await findById(roleId);
+    if (!role) return false;
+    return role.hasPermission(checkFor);
   }
 }
 

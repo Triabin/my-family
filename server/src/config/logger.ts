@@ -6,7 +6,7 @@ const allLogLevel = process.env.LOG_LEVEL || 'info';
 const logger = pino(pino.transport({
   targets: [
     // 全部日志输出到 all.log 文件
-    // { target: 'pino/file', options: { destination: `${logDir}/all.log`, mkdir: true }, level: allLogLevel },
+    { target: 'pino/file', options: { destination: `${logDir}/all.log`, mkdir: true }, level: allLogLevel },
     // 错误日志输出到 error.log 文件
     { target: 'pino/file', options: { destination: `${logDir}/error.log`, mkdir: true }, level: 'error' },
     // 全部日志输出到控制台并使用 pino-pretty 格式化

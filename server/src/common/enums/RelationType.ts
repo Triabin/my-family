@@ -10,6 +10,10 @@ enum RelationType {
   BROTHER,
   /** 姐妹 */
   SISTER,
+  /** 夫 */
+  HUSBAND,
+  /** 妻 */
+  WIFE,
   /** 儿子 */
   SON,
   /** 女儿 */

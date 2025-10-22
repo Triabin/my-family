@@ -3,7 +3,7 @@ import RelationType from '@/common/enums/RelationType';
 /**
  * 成员关系描述模型
  */
-type Relation = {
+export type Relation = {
   id: number,
   relationType: RelationType,
   relationLabel: string,
@@ -22,5 +22,6 @@ export type UserDto = {
   relations?: Relation[],
   birthday?: string,
   deathday?: string,
+  biography?: string,
   roleId: number,
 }

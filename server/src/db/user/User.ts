@@ -19,8 +19,10 @@ class User {
    * @param gender      性别，male、female
    * @param generation  代数
    * @param relations   关系数组
+   * @param alive       是否在世
    * @param birthday    出生日期
    * @param deathday    死亡日期
+   * @param biography   生平
    * @param roleId      角色ID
    * @param lastLogin   最后登录时间
    * @param deleted     删除状态
@@ -35,10 +37,12 @@ class User {
     public roleId: number,
     public deleted: boolean,
     public generation: number,
+    public alive?: boolean,
     public gender?: 'male' | 'female',
     public relations?: Relation[],
     public birthday?: Date,
     public deathday?: Date,
+    public biography?: string,
     public lastLogin?: Date,
     public updateAt?: Date,
     public createdAt?: Date,
@@ -53,10 +57,12 @@ class User {
       column.roleId,
       column.deleted,
       column.generation,
+      column.alive || undefined,
       column.gender || undefined,
       column.relations? JSON.parse(column.relations) : undefined,
       column.birthday? new Date(column.birthday) : undefined,
       column.deathday? new Date(column.deathday) : undefined,
+      column.biography || undefined,
       column.lastLogin? new Date(column.lastLogin) : undefined,
       column.updatedAt? new Date(column.updatedAt) : undefined,
       column.createdAt? new Date(column.createdAt) : undefined,
@@ -74,10 +80,12 @@ class User {
       dto.roleId,
       false,
       dto.generation,
+      dto.alive,
       dto.gender,
       dto.relations || undefined,
       birthday,
       deathday,
+      dto.biography || undefined,
     );
   }
 }
@@ -103,8 +111,10 @@ const mfUser = sqliteTable("mf_user", {
   gender: text({ enum: ['male', 'female'] }),
   generation: integer({ mode: 'number' }).notNull(),
   relations: text({ mode: 'json' }).$type<Relation[]>(),
+  alive: integer({ mode: 'boolean' }),
   birthday: integer({ mode: 'timestamp' }),
   deathday: integer({ mode: 'timestamp' }),
+  biography: text({ mode: 'text' }),
   roleId: integer('role_id', { mode: 'number' }).notNull(),
   lastLogin: integer('last_login', { mode: 'timestamp_ms' }),
   deleted: integer({ mode: 'boolean' }).default(false).notNull(),

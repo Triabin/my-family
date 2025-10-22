@@ -1,8 +1,9 @@
 import type { Request, Response } from 'express';
 import logger from '../config/logger.ts';
-import { findById } from '../db/user/User.ts';
+import User, { findById } from '../db/user/User.ts';
 import type UserDto from '../db/user/UserDto.ts';
-import { register as registerService, login as loginService } from '../services/userService.ts';
+import UserVO from '../models/UserVO.ts';
+import { register as registerService, login as loginService, allUsers } from '../services/userService.ts';
 
 export async function register(req: Request<UserDto>, res: Response) {
   try {
@@ -30,4 +31,12 @@ export async function findUser(req: Request<{ id: string }>, res: Response) {
   } else {
     res.status(200).send(user);
   }
+}
+
+export async function getAllUser(req: Request, res: Response<UserVO[]>) {
+  const users = await allUsers();
+  const voList = users.filter(user => user.roleId !== 0)
+    .map(user => User.fromColumn(user))
+    .map(user => UserVO.fromUser(user));
+  return res.status(200).json(voList);
 }

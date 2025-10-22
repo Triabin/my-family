@@ -1,11 +1,14 @@
+import bcrypt from 'bcrypt';
+import {SignJWT} from 'jose';
+import { asc, eq } from 'drizzle-orm';
+import type { Request, Response } from 'express';
+import type UserDto from "../db/user/UserDto.ts";
+import User, { add, findByUsername } from "../db/user/User.ts";
+import Role from '../db/role/Role.ts';
+import RolePermission from '../common/enums/RolePermission.ts';
+import { getLoginUserInfoFromToken } from '../common/utils.ts';
 import { mfUser } from '../db/schema.ts';
 import db from '../db/index.ts';
-import { eq, sql } from 'drizzle-orm';
-import User, { findByUsername, add } from "../db/user/User.ts";
-import type UserDto from "../db/user/UserDto.ts";
-import type { Request, Response } from 'express';
-import { SignJWT } from 'jose';
-import bcrypt from 'bcrypt';
 
 export async function addUser(user: User) {
   const result = await db.insert(mfUser).values(user);
@@ -23,14 +26,25 @@ export async function deleteUser(id: string) {
 }
 
 export async function allUsers() {
-  return db.select().from(mfUser).orderBy(sql`${mfUser.generation} ASC`);
+  return db.select()
+    .from(mfUser)
+    .where(eq(mfUser.deleted, false))
+    .orderBy(asc(mfUser.generation));
 }
 
 /**
  * 注册
  */
 export async function register(req: Request<UserDto>, res: Response) {
-  debugger;
+  // 0、鉴权
+  const loginUser = getLoginUserInfoFromToken(req.headers.authorization || '');
+  if (!loginUser) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+  const hasPermission = await Role.hasPermission(loginUser.roleId, RolePermission.USERINFO);
+  if (!hasPermission) {
+    return res.status(401).send({ message: 'You have no permission to add user' });
+  }
   // 1、判重
   const userDto: UserDto = req.body;
   const existingUser = await findByUsername(userDto.username);
@@ -48,21 +62,7 @@ export async function register(req: Request<UserDto>, res: Response) {
   // 3、插入数据库
   const result = await add(user);
   if (result) {
-    const resp = { message: 'User created successfully', token: '' };
-    // 4、生成token
-    const JWT_SECRET = process.env.JWT_SECRET;
-    if (!JWT_SECRET) {
-      resp.message += ', but JWT_SECRET not set, so token not generated';
-    } else {
-      const encodedSecret = new TextEncoder().encode(JWT_SECRET);
-      const token = await new SignJWT()
-        .setProtectedHeader({alg: 'HS256'})
-        .setExpirationTime('7d')
-        .sign(encodedSecret);
-      // res.setHeader('Authorization', `Bearer ${token}`);
-      resp.token = token;
-    }
-    return res.status(201).json(resp);
+    return res.status(201).json({ message: 'User created successfully' });
   } else {
     return res.status(400).json({ message: 'User already exists' });
   }
@@ -91,7 +91,7 @@ export async function login(req: Request<{ username: string, password: string }>
     return res.status(500).send('JWT_SECRET not set');
   }
   const encodedSecret = new TextEncoder().encode(JWT_SECRET);
-  const token = await new SignJWT()
+  const token = await new SignJWT({ id: user.id, roleId: user.roleId, name: user.name, username: user.username })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('7d')
     .sign(encodedSecret);

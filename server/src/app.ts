@@ -22,9 +22,8 @@ app.use('/api', router);
 // 所有其他路由返回 index.html（SPA 路由）
 app.get('/', async (_, res) => {
   const isInit = await isInitialized();
-  console.log('isInit', isInit);
   if (!isInit) {
-    return res.redirect('/install');
+    return res.redirect('/#/install');
   }
   res.sendFile(path.join(__dirname, 'public/index.html'))
 });

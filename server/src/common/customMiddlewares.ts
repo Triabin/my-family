@@ -19,12 +19,13 @@ export function pinoHttpMiddleware(req: Request, res: Response, next: NextFuncti
  */
 export async function authorizationMiddleware(req: Request, res: Response, next: NextFunction) {
   // 放行登录、注册、登录页面等接口
-  if (req.url.startsWith('/api/login') || req.url.startsWith('/api/register') || req.url.startsWith('/login')) {
+  if (req.url.startsWith('/api/login') || req.url.startsWith('/#/login')) {
     return next();
   }
   // 验证token
   const authorization = req.headers.authorization;
   if (!authorization || !authorization.startsWith('Bearer ')) {
+    // return res.redirect('/#/login');
     return res.status(401).send('Not authorized');
   }
   const token = authorization.split(' ')[1];

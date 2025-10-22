@@ -3,8 +3,8 @@ import router from '@/router';
 
 // 创建实例
 const service = axios.create({
-  baseURL: '/api',
-  timeout: 5000,
+  baseURL: import.meta.env.VITE_API_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -27,7 +27,7 @@ service.interceptors.response.use(response => {
     console.warn(`业务错误: ${res.message}`)
     return Promise.reject(new Error(res.message || 'Error'));
   }
-  return res;
+  return response;
 }, error => {
   const status = error.response?.status;
   switch (status) {
