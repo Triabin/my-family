@@ -15,7 +15,7 @@ class UserVO {
    * @param biography   生平
    * @param roleId      角色ID
    * @param lastLogin   最后登录时间
-   * @param updatedAt    更新时间
+   * @param updatedAt   更新时间
    * @param createdAt   创建时间
    */
   constructor(

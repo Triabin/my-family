@@ -1,3 +1,5 @@
+import { logout } from '@/api/userApi';
+
 /**
  * 从token中获取用户信息
  * @returns 用户信息
@@ -12,4 +14,13 @@ export function getUserInfoFromToken(): { id: string, roleId: number, name: stri
     return undefined;
   }
   return JSON.parse(atob(payload));
+}
+
+export function handleLogout() {
+  logout().then(resp => {
+    if (resp.status === 200) {
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+  });
 }

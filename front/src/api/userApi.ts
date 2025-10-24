@@ -19,3 +19,7 @@ export function register(dto: UserDto) {
 export function getAllUser() {
   return request.post<UserVO[]>('/get-all-user');
 }
+
+export function logout() {
+  return request.get('/logout');
+}

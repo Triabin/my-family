@@ -3,7 +3,12 @@ import logger from '../config/logger.ts';
 import User, { findById } from '../db/user/User.ts';
 import type UserDto from '../db/user/UserDto.ts';
 import UserVO from '../models/UserVO.ts';
-import { register as registerService, login as loginService, allUsers } from '../services/userService.ts';
+import {
+  register as registerService,
+  login as loginService,
+  logout as logoutService,
+  allUsers
+} from '../services/userService.ts';
 
 export async function register(req: Request<UserDto>, res: Response) {
   try {
@@ -39,4 +44,13 @@ export async function getAllUser(req: Request, res: Response<UserVO[]>) {
     .map(user => User.fromColumn(user))
     .map(user => UserVO.fromUser(user));
   return res.status(200).json(voList);
+}
+
+export async function logout(req: Request, res: Response) {
+  try {
+    return await logoutService(req, res);
+  } catch (error) {
+    logger.error(`注销登录失败，错误信息：${error}`);
+    res.status(500).send('注销登录失败');
+  }
 }

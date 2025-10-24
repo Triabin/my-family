@@ -36,7 +36,7 @@ service.interceptors.response.use(response => {
       break;
     case 401:
       console.error('未授权或者token过期，请登录');
-      router.replace({ path: '/login' });
+      window.location.href = '/login';
       break;
     case 403:
       console.error('禁止访问');

@@ -3,7 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { pinoHttpMiddleware, authorizationMiddleware } from './common/customMiddlewares.ts';
-import router from './router/index.ts';
+import userRouter from './router/userRouter.ts';
 import { isInitialized } from './services/appMainService.ts';
 
 // 在 ES 模块中获取 __dirname 的等效值
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(pinoHttpMiddleware);
 app.use(authorizationMiddleware);
-app.use('/api', router);
+app.use('/api', userRouter);
 
 // 所有其他路由返回 index.html（SPA 路由）
 app.get('/', async (_, res) => {

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import {SignJWT} from 'jose';
+import { SignJWT } from 'jose';
 import { asc, eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 import type UserDto from "../db/user/UserDto.ts";
@@ -95,6 +95,30 @@ export async function login(req: Request<{ username: string, password: string }>
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('7d')
     .sign(encodedSecret);
+  
+  // 4、更新数据库
+  const result = await db.update(mfUser).set({ lastLogin: new Date() }).where(eq(mfUser.id, user.id));
+  if (result.rowsAffected === 0) {
+    return res.status(400).send({ message: 'Login failed, user not found' });
+  }
+  
   res.setHeader('Authorization', `Bearer ${token}`);
   res.json({ message: 'Login successful', token });
+}
+
+/**
+ * 注销登录
+ */
+export async function logout(req: Request, res: Response) {
+  // 1、验证token
+  const loginUser = getLoginUserInfoFromToken(req.headers.authorization || '');
+  if (!loginUser) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+  const result = await db.update(mfUser).set({ lastLogin: new Date() }).where(eq(mfUser.id, loginUser.id));
+  if (result.rowsAffected === 0) {
+    return res.status(400).send({ message: 'Logout failed' });
+  }
+  res.setHeader('Authorization', '');
+  res.json({ message: 'Logout successful' });
 }

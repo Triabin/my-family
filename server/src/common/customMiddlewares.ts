@@ -24,11 +24,13 @@ export async function authorizationMiddleware(req: Request, res: Response, next:
   }
   // 验证token
   const authorization = req.headers.authorization;
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    // return res.redirect('/#/login');
+  if (!authorization) {
     return res.status(401).send('Not authorized');
   }
-  const token = authorization.split(' ')[1];
+  if (!authorization.startsWith('Bearer ')) {
+    return res.status(401).send('Invalid token format, should be Bearer <token>');
+  }
+  const [_, token] = authorization.split(' ');
   if (!token) {
     return res.status(401).send('No token provided');
   }
