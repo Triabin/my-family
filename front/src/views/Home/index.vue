@@ -48,7 +48,7 @@ import BubblePopover from '@/components/BubblePopover';
 
 const familyName = ref<string>('');
 const users = ref<UserVO[]>([]);
-const userInfoVisible = ref<boolean>(true);
+const userInfoVisible = ref<boolean>(false);
 const loginUser = ref<{ id: string, roleId: number, name: string, username: string } | undefined>();
 
 const toggleUserInfoVisible = () => userInfoVisible.value = !userInfoVisible.value;

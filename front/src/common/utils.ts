@@ -20,7 +20,7 @@ export function handleLogout() {
   logout().then(resp => {
     if (resp.status === 200) {
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      window.location.href = '/#/login';
     }
   });
 }

@@ -17,7 +17,7 @@
   </Teleport>
 </template>
 <script lang="ts" setup>
-import { computed, useTemplateRef, onMounted, onUnmounted } from 'vue';
+import { computed, useTemplateRef } from 'vue';
 
 // 父组件传入内容
 const props = withDefaults(defineProps<{
@@ -96,9 +96,6 @@ const clickInsidePopover = (e: MouseEvent) => {
     }
   }
 };
-
-onMounted(() => props.outClickClose && document.addEventListener('click', clickInsidePopover));
-onUnmounted(() => props.outClickClose && document.removeEventListener('click', clickInsidePopover));
 </script>
 <style lang="css" scoped>
 .popover {
